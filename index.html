@@ -3602,6 +3602,7 @@ const GameState = {
     running: false,
     paused: false,
     gameOver: false,
+    photoMode: false,
 
     // Stats
     distance: 0,
@@ -3761,6 +3762,18 @@ const GameState = {
     togglePause: function() {
         this.paused = !this.paused;
         document.getElementById('pauseOverlay').style.display = this.paused ? 'flex' : 'none';
+    },
+
+    togglePhotoMode: function() {
+        this.photoMode = !this.photoMode;
+        const ui = document.getElementById('uiContainer');
+        if (this.photoMode) {
+            ui.style.display = 'none';
+            this.paused = true;
+        } else {
+            ui.style.display = 'block';
+            this.paused = false;
+        }
     }
 };
 
@@ -6896,6 +6909,13 @@ const Input = {
             // Pause toggle
             if (e.code === 'KeyP' && GameState.running) {
                 GameState.togglePause();
+            }
+
+            // Photo mode toggle (C)
+            if (e.code === 'KeyC' && GameState.running && !GameState.gameOver) {
+                e.preventDefault();
+                GameState.togglePhotoMode();
+                alert(GameState.photoMode ? 'PHOTO MODE ON - Press C to exit' : 'PHOTO MODE OFF');
             }
         });
 
